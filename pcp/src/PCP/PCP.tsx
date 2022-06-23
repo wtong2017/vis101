@@ -6,8 +6,8 @@ export const PCP: React.FC = () => {
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const ref = React.useRef(null);
-    const [h, setHeight] = React.useState(0);
-    const [w, setWidth] = React.useState(1024);
+    const [h, setHeight] = React.useState(600);
+    const [w, setWidth] = React.useState(0);
 
     React.useEffect(() => {
         d3.csv(staticFile("data.csv")).then((data) => {
@@ -17,19 +17,20 @@ export const PCP: React.FC = () => {
             setLoading(false);
 
             let keys = data.columns.slice(1)
-            let height = keys.length * 50
-            setHeight(height)
-            let margin = ({ top: 20, right: 10, bottom: 20, left: 10 })
-            console.log(w, height);
+            let width = keys.length * 250
+            let height = h
+            setWidth(width)
+            let margin = ({ top: 40, right: 20, bottom: 20, left: 40 })
+            console.log(width, height);
 
-            let x = new Map(Array.from(keys, key => [key, d3.scaleLinear(d3.extent(data, d => +d[key]), [margin.left, w - margin.right])]))
+            let y = new Map(Array.from(keys, key => [key, d3.scaleLinear(d3.extent(data, d => +d[key]), [margin.top, height - margin.bottom])]))
 
-            let y = d3.scalePoint(keys, [margin.top, height - margin.bottom])
+            let x = d3.scalePoint(keys, [margin.left, width - margin.right])
 
             let line = d3.line()
                 .defined(([, value]) => value != null)
-                .x(([key, value]) => x.get(key)(value))
-                .y(([key]) => y(key))
+                .y(([key, value]) => y.get(key)(value))
+                .x(([key]) => x(key))
 
 
             const svg = d3.select(ref.current)
@@ -52,11 +53,11 @@ export const PCP: React.FC = () => {
                 .selectAll("g")
                 .data(keys)
                 .join("g")
-                .attr("transform", d => `translate(0,${y(d)})`)
-                .each(function (d) { d3.select(this).call(d3.axisBottom(x.get(d))); })
+                .attr("transform", d => `translate(${x(d)},0)`)
+                .each(function (d) { d3.select(this).call(d3.axisLeft(y.get(d))); })
                 .call(g => g.append("text")
-                    .attr("x", margin.left)
-                    .attr("y", -6)
+                .attr("x", -6)
+                    .attr("y", margin.top -10)
                     .attr("text-anchor", "start")
                     .attr("fill", "currentColor")
                     .text(d => d))
