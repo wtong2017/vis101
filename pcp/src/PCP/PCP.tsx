@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import React from "react";
 import { staticFile } from "remotion";
 
-export const PCP: React.FC = () => {
+export default function PCP(props: { fileName: string, width: number | string, height: number | string }) {
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const ref = React.useRef(null);
@@ -10,20 +10,23 @@ export const PCP: React.FC = () => {
     const [w, setWidth] = React.useState(0);
 
     React.useEffect(() => {
-        d3.csv(staticFile("data.csv")).then((data) => {
+        d3.csv(staticFile(props.fileName)).then((data) => {
             console.log(data);
 
             setData(data);
             setLoading(false);
 
-            let keys = data.columns.slice(1)
-            let width = keys.length * 250
+            let keys = data.columns
+            if (props.fileName == "./data.csv") {
+                keys = data.columns.slice(1)
+            }
+            let width = keys.length * 400
             let height = h
             setWidth(width)
             let margin = ({ top: 40, right: 20, bottom: 20, left: 40 })
             console.log(width, height);
 
-            let y = new Map(Array.from(keys, key => [key, d3.scaleLinear(d3.extent(data, d => +d[key]), [margin.top, height - margin.bottom])]))
+            let y = new Map(Array.from(keys, key => [key, d3.scaleLinear(d3.extent(data, d => +d[key]), [height - margin.bottom, margin.top])]))
 
             let x = d3.scalePoint(keys, [margin.left, width - margin.right])
 
@@ -56,8 +59,8 @@ export const PCP: React.FC = () => {
                 .attr("transform", d => `translate(${x(d)},0)`)
                 .each(function (d) { d3.select(this).call(d3.axisLeft(y.get(d))); })
                 .call(g => g.append("text")
-                .attr("x", -6)
-                    .attr("y", margin.top -10)
+                    .attr("x", -6)
+                    .attr("y", margin.top - 10)
                     .attr("text-anchor", "start")
                     .attr("fill", "currentColor")
                     .text(d => d))
@@ -71,6 +74,12 @@ export const PCP: React.FC = () => {
         return () => undefined;
     }, []);
     return (
-        <svg ref={ref} viewBox={`0 0 ${w} ${h}`}></svg>
+        <svg ref={ref} width={props.width} height={props.height} viewBox={`0 0 ${w} ${h}`}></svg>
     );
+};
+
+PCP.defaultProps = {
+    fileName: "./data.csv",
+    width: "100%",
+    height: "100%"
 };

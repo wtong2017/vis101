@@ -7,12 +7,7 @@ import {
     useCurrentFrame,
     useVideoConfig,
 } from 'remotion';
-import { COLOR_1, FONT_FAMILY } from './HelloWorld/constants';
-import { Logo } from './HelloWorld/Logo';
-import { Subtitle } from './HelloWorld/Subtitle';
-import { Title } from './HelloWorld/Title';
-import { PCP } from './PCP/PCP';
-import excel from './excel.png'
+import PCP from './PCP/PCP';
 
 export const Description: React.FC = () => {
     const frame = useCurrentFrame();

@@ -11,7 +11,6 @@ import { COLOR_1, FONT_FAMILY } from './HelloWorld/constants';
 import { Logo } from './HelloWorld/Logo';
 import { Subtitle } from './HelloWorld/Subtitle';
 import { Title } from './HelloWorld/Title';
-import { PCP } from './PCP/PCP';
 import excel from './excel.png'
 import { useEffect, useState } from 'react';
 import { Transition } from './Transition';

@@ -10,9 +10,10 @@ import { COLOR_1 } from './HelloWorld/constants';
 import {Logo} from './HelloWorld/Logo';
 import {Subtitle} from './HelloWorld/Subtitle';
 import {Title} from './HelloWorld/Title';
-import { PCP } from './PCP/PCP';
+import PCP from './PCP/PCP';
 
-export const HelloWorld: React.FC<{
+
+export const Openning: React.FC<{
 	titleText: string;
 	titleColor: string;
 }> = ({titleText, titleColor}) => {

@@ -8,7 +8,7 @@ import {
 } from 'remotion';
 import { Background } from './Background';
 import { Description } from './Description';
-import { HelloWorld } from './HelloWorld';
+import { Openning } from './Openning';
 import { Tutorial } from './Tutorial';
 
 export const Main: React.FC<{
@@ -34,7 +34,7 @@ export const Main: React.FC<{
 		<AbsoluteFill style={{backgroundColor: 'white'}}>
 			<AbsoluteFill style={{opacity}}>
 				<Sequence from={0} durationInFrames={150}>
-					<HelloWorld titleText={titleText} titleColor={titleColor} />
+					<Openning titleText={titleText} titleColor={titleColor} />
 				</Sequence>
 
                 <Sequence from={150} durationInFrames={300}>
@@ -45,7 +45,7 @@ export const Main: React.FC<{
 					<Description />
 				</Sequence>
 
-                <Sequence from={750} durationInFrames={300}>
+                <Sequence from={750}>
 					<Tutorial />
 				</Sequence>
 
